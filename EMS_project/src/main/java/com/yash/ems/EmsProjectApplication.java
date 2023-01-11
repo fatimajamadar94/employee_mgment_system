@@ -1,4 +1,4 @@
-package com.yash.ems.EMS_project;
+package com.yash.ems;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
