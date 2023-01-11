@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer empId;
+	private Long id;
 	private String employeeName;
 	@DateTimeFormat(pattern="yyyy-mm-dd")
 	private Date datOfJoining;
