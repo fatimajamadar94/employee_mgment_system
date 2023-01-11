@@ -14,15 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.yash.ems.model.Employee;
 import com.yash.ems.repository.EmployeeRepository;
-
+@RestController
 public class EmployeeController {
 	 @Autowired
 	  EmployeeRepository empRepository;
 
-	  @GetMapping("/Employees")
+	  @GetMapping("/getEmployees")
 	  public ResponseEntity<List<Employee>> getAllEmployees() {
 	    List<Employee> employee = new ArrayList<Employee>();
 
@@ -35,7 +36,7 @@ public class EmployeeController {
 	    return new ResponseEntity<>(employee, HttpStatus.OK);
 	  }
 
-	  @GetMapping("/Employees/{id}")
+	  @GetMapping("/employee/{id}")
 	  public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id) {
 	    Optional<Employee> employee = empRepository.findById(id);
 	    Employee emp=employee.get();
@@ -44,13 +45,13 @@ public class EmployeeController {
 	    return new ResponseEntity<>(emp, HttpStatus.OK);
 	  }
 
-	  @PostMapping("/Employees")
+	  @PostMapping("/createEmp")
 	  public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
 	    Employee employee1 = empRepository.save(employee);
 	    return new ResponseEntity<>(employee1, HttpStatus.CREATED);
 	  }
 
-	  @PutMapping("/Employees/{id}")
+	  @PutMapping("/employee/{id}")
 	  public ResponseEntity<Employee> updateEmployee(@PathVariable("id") long id, @RequestBody Employee employee) {
 	    Optional<Employee> employee1 = empRepository.findById(id);
 	        //.orElseThrow(() -> new ResourceNotFoundException("Not found Employee with id = " + id));
@@ -62,30 +63,28 @@ public class EmployeeController {
 	    return new ResponseEntity<>(empRepository.save(employee), HttpStatus.OK);
 	  }
 
-	  @DeleteMapping("/Employees/{id}")
+	  @DeleteMapping("/employee/{id}")
 	  public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable("id") long id) {
 	    empRepository.deleteById(id);
 	    
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	  }
 
-	  @DeleteMapping("/Employees")
+	  @DeleteMapping("/deleteEmployees")
 	  public ResponseEntity<HttpStatus> deleteAllEmployees() {
 	    empRepository.deleteAll();
 	    
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	  }
 
-	  @GetMapping("/Employees/published")
-	  public ResponseEntity<List<Employee>> findByPublished() {
-	    List<Employee> Employees =null;
-	    //empRepository.findByPublished(true);
-
-	    if (Employees.isEmpty()) {
-	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	    }
-	    
-	    return new ResponseEntity<>(Employees, HttpStatus.OK);
-	  }
+		/*
+		 * @GetMapping("/employees/published") public ResponseEntity<Employee>
+		 * findByName() { List<Employee> employee =null; empRepository.findByName(true);
+		 * 
+		 * if (employee.isEmpty()) { return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		 * }
+		 * 
+		 * return new ResponseEntity<>(employee, HttpStatus.OK); }
+		 */
 
 }
