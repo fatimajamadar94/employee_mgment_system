@@ -16,33 +16,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yash.ems.exception.ResourceNotFoundException;
 import com.yash.ems.model.Employee;
 import com.yash.ems.repository.EmployeeRepository;
 @RestController
 public class EmployeeController {
 	 @Autowired
 	  EmployeeRepository empRepository;
+	 
+	 @GetMapping("/hello")
+	 public String get() {
+		 return "hello ";
+	 }
 
 	  @GetMapping("/getEmployees")
 	  public ResponseEntity<List<Employee>> getAllEmployees() {
 	    List<Employee> employee = new ArrayList<Employee>();
-
+System.out.println(employee);
 	      empRepository.findAll().forEach(employee::add);
 	   
 	    if (employee.isEmpty()) {
 	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }
-
+	    else
 	    return new ResponseEntity<>(employee, HttpStatus.OK);
 	  }
 
 	  @GetMapping("/employee/{id}")
 	  public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id) {
-	    Optional<Employee> employee = empRepository.findById(id);
-	    Employee emp=employee.get();
-	       // .orElseThrow(() -> new ResourceNotFoundException("Not found Employee with id = " + id));
+	    Employee employee = empRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Employee with id = " + id));
 
-	    return new ResponseEntity<>(emp, HttpStatus.OK);
+	    return new ResponseEntity<>(employee, HttpStatus.OK);
 	  }
 
 	  @PostMapping("/createEmp")
@@ -53,14 +57,13 @@ public class EmployeeController {
 
 	  @PutMapping("/employee/{id}")
 	  public ResponseEntity<Employee> updateEmployee(@PathVariable("id") long id, @RequestBody Employee employee) {
-	    Optional<Employee> employee1 = empRepository.findById(id);
-	        //.orElseThrow(() -> new ResourceNotFoundException("Not found Employee with id = " + id));
-
-	//    employee.setTiemployee1.getTitle());
-	   // employee.setDescription(employee1.getDescription());
-	  //  employee.setPublished(employee1.isPublished());
-	    
-	    return new ResponseEntity<>(empRepository.save(employee), HttpStatus.OK);
+	    Employee employee1 = empRepository.findById(id)
+	        .orElseThrow(() -> new ResourceNotFoundException("Not found Employee with id = " + id));
+	    employee1.setDatOfJoining(employee.getDatOfJoining());
+	    employee1.setEmployeeName(employee.getEmployeeName());
+	    employee1.setDatOfJoining(employee.getDatOfJoining());
+	    employee1.setEmployeeID(employee.getEmployeeID());
+	    return new ResponseEntity<>(empRepository.save(employee1), HttpStatus.OK);
 	  }
 
 	  @DeleteMapping("/employee/{id}")
