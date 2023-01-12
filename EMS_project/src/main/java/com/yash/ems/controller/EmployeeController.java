@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ import com.yash.ems.exception.ResourceNotFoundException;
 import com.yash.ems.model.Employee;
 import com.yash.ems.repository.EmployeeRepository;
 @RestController
+@RequestMapping("/employee/api")
 public class EmployeeController {
 	 @Autowired
 	  EmployeeRepository empRepository;
@@ -80,14 +82,16 @@ System.out.println(employee);
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	  }
 
-		/*
-		 * @GetMapping("/employees/published") public ResponseEntity<Employee>
-		 * findByName() { List<Employee> employee =null; empRepository.findByName(true);
-		 * 
-		 * if (employee.isEmpty()) { return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		 * }
-		 * 
-		 * return new ResponseEntity<>(employee, HttpStatus.OK); }
-		 */
+		
+		  @GetMapping("/employees/{keyword}") public ResponseEntity<List<Employee>>
+		  searchEmp(@PathVariable("keyword")String keyword) {
+			  List<Employee> employee = empRepository.searchEmp(keyword);
+		  
+		  if (employee.isEmpty()) { return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		  }
+		  else
+		  return new ResponseEntity<List<Employee>>(employee, HttpStatus.OK);
+		  }
+		 
 
 }
