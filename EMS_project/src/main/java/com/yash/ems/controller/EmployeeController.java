@@ -17,14 +17,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.net.HttpHeaders;
 import com.yash.ems.exception.ResourceNotFoundException;
 import com.yash.ems.model.Employee;
 import com.yash.ems.repository.EmployeeRepository;
+import com.yash.ems.service.EmployeeService;
 @RestController
 @RequestMapping("/employee/api")
 public class EmployeeController {
 	 @Autowired
 	  EmployeeRepository empRepository;
+	 
+	 @Autowired
+	 EmployeeService service;
+	 
 	 
 	 @GetMapping("/hello")
 	 public String get() {
@@ -93,5 +99,14 @@ System.out.println(employee);
 		  return new ResponseEntity<List<Employee>>(employee, HttpStatus.OK);
 		  }
 		 
+		  @GetMapping("/sortEmployee")
+		    public ResponseEntity<List<Employee>> getAllEmployees(
+		                        @RequestParam(defaultValue = "0") Integer pageNo,
+		                        @RequestParam(defaultValue = "10") Integer pageSize,
+		                        @RequestParam(defaultValue = "id") String sortBy)
+		    {
+		        List<Employee> list = service.getAllEmployees(pageNo, pageSize, sortBy);
 
+		        return new ResponseEntity<List<Employee>>(list, HttpStatus.OK);
+		    }
 }

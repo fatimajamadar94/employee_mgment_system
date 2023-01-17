@@ -1,7 +1,9 @@
 package com.yash.ems.repository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,5 +16,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "p.employeeName LIKE CONCAT('%',:keyword, '%')" +
             "Or p.reportingManager LIKE CONCAT('%', :keyword, '%')",nativeQuery=false)
 List<Employee> searchEmp(String keyword);
+
 
 }
