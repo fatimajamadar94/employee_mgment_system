@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.google.common.net.HttpHeaders;
 import com.yash.ems.exception.ResourceNotFoundException;
 import com.yash.ems.model.Employee;
 import com.yash.ems.repository.EmployeeRepository;
@@ -31,7 +31,8 @@ public class EmployeeController {
 	 @Autowired
 	 EmployeeService service;
 	 
-	 
+		Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+
 	 @GetMapping("/hello")
 	 public String get() {
 		 return "hello ";
@@ -53,6 +54,7 @@ System.out.println(employee);
 	  @GetMapping("/employee/{id}")
 	  public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id) {
 	    Employee employee = empRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Employee with id = " + id));
+		logger.info("employee with Id :" + id + "is" + employee.getId());
 
 	    return new ResponseEntity<>(employee, HttpStatus.OK);
 	  }
@@ -77,7 +79,7 @@ System.out.println(employee);
 	  @DeleteMapping("/employee/{id}")
 	  public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable("id") long id) {
 	    empRepository.deleteById(id);
-	    
+	    logger.info("employee deleted sucessfully!!");
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	  }
 
@@ -99,6 +101,7 @@ System.out.println(employee);
 		  return new ResponseEntity<List<Employee>>(employee, HttpStatus.OK);
 		  }
 		 
+		  //sort all employe as per order 
 		  @GetMapping("/sortEmployee")
 		    public ResponseEntity<List<Employee>> getAllEmployees(
 		                        @RequestParam(defaultValue = "0") Integer pageNo,
